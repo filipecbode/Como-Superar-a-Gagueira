@@ -1,133 +1,22 @@
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    
     // Get all CTA buttons
     const ctaButtons = document.querySelectorAll('.cta-button');
-    
+
     // Handle CTA button clicks
     ctaButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            handlePurchase();
+            // Redirecionar diretamente para o checkout da Kiwify
+            window.open('https://pay.kiwify.com.br/1T7gagy', '_blank');
         });
     });
-    
-    // Handle purchase action
-    function handlePurchase() {
-        // Show loading state
-        const originalTexts = [];
-        ctaButtons.forEach((button, index) => {
-            originalTexts[index] = button.textContent;
-            button.textContent = 'PROCESSANDO...';
-            button.disabled = true;
-            button.style.opacity = '0.7';
-        });
-        
-        // Simulate processing time
-        setTimeout(() => {
-            // Reset buttons
-            ctaButtons.forEach((button, index) => {
-                button.textContent = originalTexts[index];
-                button.disabled = false;
-                button.style.opacity = '1';
-            });
-            
-            // Show purchase modal/alert
-            showPurchaseModal();
-        }, 2000);
-    }
-    
-    // Show purchase modal
-    function showPurchaseModal() {
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        `;
-        
-        const modalContent = document.createElement('div');
-        modalContent.style.cssText = `
-            background: var(--color-surface);
-            padding: 40px;
-            border-radius: var(--radius-lg);
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            box-shadow: var(--shadow-lg);
-            animation: slideUp 0.3s ease;
-        `;
-        
-        modalContent.innerHTML = `
-            <h3 style="color: var(--color-primary); margin-bottom: 20px; font-size: var(--font-size-2xl);">
-                🎉 Parabéns pela sua decisão!
-            </h3>
-            <p style="margin-bottom: 30px; font-size: var(--font-size-lg); line-height: 1.6;">
-                Você será redirecionado para completar sua compra do guia "Como Superar a Gagueira" por apenas <strong>R$ 27,00</strong>.
-            </p>
-            <div style="margin-bottom: 30px; padding: 20px; background: var(--color-bg-3); border-radius: var(--radius-base);">
-                <p style="margin: 0; font-size: var(--font-size-md); color: var(--color-success);">
-                    ✓ Acesso imediato após o pagamento<br>
-                    ✓ Garantia de 7 dias - Se não ficar satisfeito, devolvemos 100% do seu dinheiro<br>
-                    ✓ Suporte completo incluído
-                </p>
-            </div>
-            <button id="continueBtn" class="btn btn--primary btn--lg" style="margin-right: 10px;">
-                CONTINUAR COMPRA
-            </button>
-            <button id="closeModal" class="btn btn--outline">
-                FECHAR
-            </button>
-        `;
-        
-        modal.appendChild(modalContent);
-        document.body.appendChild(modal);
-        
-        // Add animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            @keyframes slideUp {
-                from { transform: translateY(50px); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Handle modal buttons
-        document.getElementById('continueBtn').addEventListener('click', () => {
-            // Simulate redirect to payment
-            alert('Redirecionando para pagamento... (Em uma implementação real, aqui seria integrado com um gateway de pagamento como PagSeguro, Mercado Pago, etc.)');
-            document.body.removeChild(modal);
-        });
-        
-        document.getElementById('closeModal').addEventListener('click', () => {
-            document.body.removeChild(modal);
-        });
-        
-        // Close modal when clicking outside
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                document.body.removeChild(modal);
-            }
-        });
-    }
-    
-    // Smooth scroll for any internal links
+
+    // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
+
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
                 target.scrollIntoView({
@@ -137,122 +26,169 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
-    // Intersection Observer for fade-in animations
+
+    // Add scroll effect to header
+    const header = document.querySelector('.hero-section');
+    if (header) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                header.style.background = 'linear-gradient(135deg, rgba(16, 124, 215, 0.95) 0%, rgba(21, 131, 237, 0.95) 100%)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%)';
+            }
+        });
+    }
+
+    // Add hover effects to cards
+    const cards = document.querySelectorAll('.benefit-card, .feature-card, .stat-card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.05)';
+        });
+    });
+
+    // Add loading animation to page elements
+    const animateElements = document.querySelectorAll('.stat-card, .benefit-card, .feature-card');
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
-    
-    // Add fade-in class to sections and observe them
-    const sections = document.querySelectorAll('section');
-    sections.forEach((section, index) => {
-        section.classList.add('fade-in');
-        section.style.transitionDelay = `${index * 0.1}s`;
-        observer.observe(section);
+
+    // Initially hide elements for animation
+    animateElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
     });
-    
-    // Add hover effects to cards
-    const cards = document.querySelectorAll('.benefit-card, .testimonial-card, .stat-card');
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-8px)';
-            this.style.transition = 'transform 0.3s ease';
+
+    // Number counting animation for stats
+    const countNumbers = document.querySelectorAll('.stat-number');
+
+    const startCounting = (entry) => {
+        const target = entry.target;
+        const text = target.textContent;
+        const number = parseInt(text.replace(/[^0-9]/g, ''));
+
+        if (number && !target.dataset.counted) {
+            target.dataset.counted = 'true';
+            let current = 0;
+            const increment = number / 50;
+            const suffix = text.replace(/[0-9]/g, '');
+
+            const counter = setInterval(() => {
+                current += increment;
+                if (current >= number) {
+                    target.textContent = text;
+                    clearInterval(counter);
+                } else {
+                    target.textContent = Math.floor(current) + suffix;
+                }
+            }, 30);
+        }
+    };
+
+    const numberObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                startCounting(entry);
+            }
         });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
+    }, { threshold: 0.5 });
+
+    countNumbers.forEach(num => {
+        numberObserver.observe(num);
     });
-    
-    // Add pulse animation to CTA buttons
-    function addPulseAnimation() {
+
+    // Add floating animation to CTA buttons
+    setInterval(() => {
         ctaButtons.forEach(button => {
-            if (!button.disabled) {
-                button.style.animation = 'pulse 2s infinite';
+            if (!button.matches(':hover') && !button.disabled) {
+                button.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 200);
             }
         });
-    }
-    
-    // Add pulse keyframes
-    const pulseStyle = document.createElement('style');
-    pulseStyle.textContent = `
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(33, 128, 141, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(33, 128, 141, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(33, 128, 141, 0); }
-        }
-    `;
-    document.head.appendChild(pulseStyle);
-    
-    // Start pulse animation after a delay
-    setTimeout(addPulseAnimation, 3000);
-    
-    // Track scroll position for sticky CTA (optional enhancement)
-    let lastScrollTop = 0;
-    window.addEventListener('scroll', function() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        // Add/remove classes based on scroll direction
-        if (scrollTop > lastScrollTop) {
-            // Scrolling down
-            document.body.classList.add('scrolling-down');
-        } else {
-            // Scrolling up
-            document.body.classList.remove('scrolling-down');
-        }
-        
-        lastScrollTop = scrollTop;
+    }, 3000);
+
+    // Add click ripple effect
+    ctaButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s ease;
+                pointer-events: none;
+            `;
+
+            this.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
     });
-    
-    // Add loading indicator for better UX
-    function showLoadingIndicator() {
-        const loader = document.createElement('div');
-        loader.id = 'loading-indicator';
-        loader.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--color-surface);
-            padding: 20px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            z-index: 1001;
-            display: none;
-        `;
-        
-        loader.innerHTML = `
-            <div style="text-align: center;">
-                <div style="width: 40px; height: 40px; border: 3px solid var(--color-border); border-top: 3px solid var(--color-primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px;"></div>
-                <p style="margin: 0; color: var(--color-text);">Processando...</p>
-            </div>
-        `;
-        
-        document.body.appendChild(loader);
-        
-        // Add spin animation
-        const spinStyle = document.createElement('style');
-        spinStyle.textContent = `
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        `;
-        document.head.appendChild(spinStyle);
-    }
-    
-    showLoadingIndicator();
-    
-    // Console message for developers
-    console.log('🚀 Como Superar a Gagueira - Landing Page carregada com sucesso!');
-    console.log('📧 Para integração com gateway de pagamento, configure as APIs necessárias.');
 });
+
+// Add CSS for ripple animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes ripple {
+        to {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+
+    .cta-button {
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from { 
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+document.head.appendChild(style);
