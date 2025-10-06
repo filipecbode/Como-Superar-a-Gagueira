@@ -71,12 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 🎉 Parabéns pela sua decisão!
             </h3>
             <p style="margin-bottom: 30px; font-size: var(--font-size-lg); line-height: 1.6;">
-                Você será redirecionado para completar sua compra do guia "Como Superar a Gagueira" por apenas <strong>R$ 97,00</strong>.
+                Você será redirecionado para completar sua compra do guia "Como Superar a Gagueira" por apenas <strong>R$ 27,00</strong>.
             </p>
             <div style="margin-bottom: 30px; padding: 20px; background: var(--color-bg-3); border-radius: var(--radius-base);">
                 <p style="margin: 0; font-size: var(--font-size-md); color: var(--color-success);">
                     ✓ Acesso imediato após o pagamento<br>
-                    ✓ Garantia de 30 dias<br>
+                    ✓ Garantia de 7 dias - Se não ficar satisfeito, devolvemos 100% do seu dinheiro<br>
                     ✓ Suporte completo incluído
                 </p>
             </div>
